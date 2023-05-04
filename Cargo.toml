@@ -1,0 +1,11 @@
+[package]
+name = "invaders"
+version = "0.1.0"
+authors = ["St4nl3y-W0ng", "70022847+St4nl3y-W0ng@users.noreply.github.com"]
+edition = "2021"
+
+[dependencies]
+crossterm = "0.26.1"
+crossbeam  = "0.8.2"
+rusty_audio = "1.4.1"
+rusty_time = "0.12.0"
