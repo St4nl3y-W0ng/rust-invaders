@@ -46,6 +46,7 @@ impl Drawable for Player{
     fn draw(&self, frame: &mut Frame) {
         // frame[self.x][self.y] = "A";
         frame[self.x][self.y] = "🚀";
+        frame[self.x+1][self.y] = "";
         for shot in self.shots.iter() {
             shot.draw(frame);
         }
