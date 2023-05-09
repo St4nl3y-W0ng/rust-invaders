@@ -7,13 +7,11 @@ use rusty_audio::Audio;
 
 fn main() -> Result <(), Box<dyn Error>>{
     // Audio
+    const AUDIO_FILEPATH: &str = "audio/";
     let mut audio = Audio::new();
-    audio.add("explode", "explode.wav");
-    audio.add("lose", "lose.wav");
-    audio.add("move", "move.wav");
-    audio.add("pew", "pew.wav");
-    audio.add("startup", "startup.wav");
-    audio.add("win", "win.wav");
+    for item in &["explode", "lose", "move", "pew", "startup", "win"] {
+        audio.add(item, &format!("{AUDIO_FILEPATH}{item}.wav"));
+    }
     audio.play("startup");
     // Render loop in a separate thread
     let (render_tx, render_rx) = channel::unbounded();
@@ -72,6 +70,9 @@ fn main() -> Result <(), Box<dyn Error>>{
         if invaders.update(delta) {
             audio.play("move");
         }
+        if player.detect_hits(&mut invaders){
+            audio.play("explode");
+        }
         // Draw and render
         // player.draw(&mut curr_frame); // replaced by generic
         // invaders.draw(&mut curr_frame);
@@ -81,6 +82,16 @@ fn main() -> Result <(), Box<dyn Error>>{
         }
         let _ = render_tx.send(curr_frame); // catches and ignores err  
         thread::sleep(Duration::from_millis(1));
+
+        // Win or Lose?
+        if invaders.all_killed() {
+            audio.play("win");
+            break 'gameloop;
+        }
+        if invaders.reached_bottom() {
+            audio.play("lose");
+            break 'gameloop;
+        }
     }
 
     // Cleanup
@@ -90,7 +101,7 @@ fn main() -> Result <(), Box<dyn Error>>{
     stdout.execute(Show)?;
     stdout.execute(LeaveAlternateScreen)?;
     terminal::disable_raw_mode()?;
-    println!("Hello");
+    println!("Game Over!");
     
     Ok(())
 }
