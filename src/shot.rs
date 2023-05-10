@@ -11,16 +11,16 @@ pub struct Shot {
     timer: Timer,
 }
 
-impl Shot{
-    pub fn new(x: usize, y:usize) -> Self{
-        Self { 
+impl Shot {
+    pub fn new(x: usize, y: usize) -> Self {
+        Self {
             x: x,
             y: y,
             exploding: false,
             timer: Timer::from_millis(50),
         }
     }
-    pub fn update(&mut self, delta: Duration){
+    pub fn update(&mut self, delta: Duration) {
         self.timer.update(delta);
         if self.timer.ready && !self.exploding {
             if self.y > 0 {
@@ -29,7 +29,7 @@ impl Shot{
             self.timer.reset();
         }
     }
-    pub fn explode(&mut self){
+    pub fn explode(&mut self) {
         self.exploding = true;
         self.timer = Timer::from_millis(250);
     }
@@ -40,7 +40,7 @@ impl Shot{
 
 impl Drawable for Shot {
     fn draw(&self, frame: &mut Frame) {
-        frame[self.x][self.y] = if self.exploding {"❄"} else {"⬤"};
+        frame[self.x][self.y] = if self.exploding { "❄" } else { "⬤" };
         // frame[self.x][self.y] = if self.exploding {"💥"} else {"⚡"};
     }
 }
