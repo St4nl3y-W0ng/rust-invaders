@@ -14,8 +14,8 @@ pub struct Shot {
 impl Shot {
     pub fn new(x: usize, y: usize) -> Self {
         Self {
-            x: x,
-            y: y,
+            x,
+            y,
             exploding: false,
             timer: Timer::from_millis(50),
         }
